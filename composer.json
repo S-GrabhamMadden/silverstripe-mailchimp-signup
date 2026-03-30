@@ -16,10 +16,10 @@
         }
     ],
     "require": {
-        "silverstripe/cms": "^5",
+        "silverstripe/cms": "^6.0",
         "drewm/mailchimp-api": "~2.0",
-        "symbiote/silverstripe-multivaluefield": "^6",
-        "dynamic/silverstripe-country-dropdown-field": "^2"
+        "symbiote/silverstripe-multivaluefield": "^7.0",
+        "dynamic/silverstripe-country-dropdown-field": "^3.0"
     },
     "autoload": {
         "psr-4": {
