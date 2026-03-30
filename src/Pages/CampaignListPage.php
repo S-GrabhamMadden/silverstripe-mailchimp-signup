@@ -197,6 +197,7 @@ class CampaignListPage extends Page {
                 // get next time we should update
                 $nextUpdateTime = strtotime($lastUpdated . ' +' . $updateInterval . ' seconds');
             }
+
             // If we haven't auto-updated before (fresh install), or an update is due, do update
             if ($onWrite || !isset($nextUpdateTime) || $nextUpdateTime < time()) {
 

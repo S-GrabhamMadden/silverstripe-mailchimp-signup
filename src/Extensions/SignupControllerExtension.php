@@ -376,6 +376,11 @@ class SignupControllerExtension extends Extension
             $session = $this->getOwner()->getRequest()->getSession();
             $sessionData = $session->get('FormInfo.' . $form->FormName() . '.data');
             if (is_array($sessionData)) {
+                /** @TODO SSU RECTOR UPGRADE TASK - Form::loadDataFrom: Changed default value for parameter $fieldList in Form::loadDataFrom() from null to []
+                 * @TODO SSU RECTOR UPGRADE TASK - Form::loadDataFrom: Changed type of parameter $data in Form::loadDataFrom() from dynamic to object|array
+                 * @TODO SSU RECTOR UPGRADE TASK - Form::loadDataFrom: Changed type of parameter $fieldList in Form::loadDataFrom() from dynamic to array
+                 * @TODO SSU RECTOR UPGRADE TASK - Form::loadDataFrom: Changed type of parameter $mergeStrategy in Form::loadDataFrom() from dynamic to int
+                 */
                 $form->loadDataFrom($sessionData);
             }
         } catch (BadMethodCallException) {
@@ -478,6 +483,10 @@ class SignupControllerExtension extends Extension
             $session->set('FormInfo.' . $form->FormName() . '.data', $data);
 
             // add error message
+            /** @TODO SSU RECTOR UPGRADE TASK - Form::sessionMessage: Changed type of parameter $cast in Form::sessionMessage() from dynamic to string
+             * @TODO SSU RECTOR UPGRADE TASK - Form::sessionMessage: Changed type of parameter $message in Form::sessionMessage() from dynamic to string
+             * @TODO SSU RECTOR UPGRADE TASK - Form::sessionMessage: Changed type of parameter $type in Form::sessionMessage() from dynamic to string
+             */
             $form->sessionMessage($result['message'], $result['type']);
 
             // redirect back

@@ -30,6 +30,10 @@ class SignupDataExtension extends Extension
 
     public function updateCMSFields(FieldList $fields)
     {
+        /** @TODO SSU RECTOR UPGRADE TASK - FieldList::removeByName: Changed type of parameter $dataFieldOnly in FieldList::removeByName() from dynamic to bool
+         * @TODO SSU RECTOR UPGRADE TASK - FieldList::removeByName: Changed type of parameter $fieldName in FieldList::removeByName() from dynamic to string|array
+         * @TODO SSU RECTOR UPGRADE TASK - FieldList::removeByName: Changed return type for method FieldList::removeByName() from dynamic to FieldList
+         */
         $fields->removeByName([
             'APIKey',
             'ListID',
@@ -37,6 +41,11 @@ class SignupDataExtension extends Extension
             'ContentSuccess',
             'ContentError']
         );
+        /** @TODO SSU RECTOR UPGRADE TASK - FieldList::addFieldsToTab: Changed type of parameter $fields in FieldList::addFieldsToTab() from dynamic to array
+         * @TODO SSU RECTOR UPGRADE TASK - FieldList::addFieldsToTab: Changed type of parameter $insertBefore in FieldList::addFieldsToTab() from dynamic to string|null
+         * @TODO SSU RECTOR UPGRADE TASK - FieldList::addFieldsToTab: Changed type of parameter $tabName in FieldList::addFieldsToTab() from dynamic to string
+         * @TODO SSU RECTOR UPGRADE TASK - FieldList::addFieldsToTab: Changed return type for method FieldList::addFieldsToTab() from dynamic to FieldList
+         */
         $fields->addFieldsToTab(
             'Root.Mailchimp',
             [
