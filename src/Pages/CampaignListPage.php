@@ -51,11 +51,40 @@ class CampaignListPage extends Page {
         'Logger' => '%$' . LoggerInterface::class,
     ];
 
+    private static array $scaffold_cms_fields_settings = [
+        'ignoreFields' => [
+            'LastUpdated',
+        ],
+        'ignoreRelations' => [
+            'Campaigns',
+        ],
+    ];
+
     protected $logger;
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
+
+        $apiKeyField = $fields->dataFieldByName('APIKey');
+        if ($apiKeyField) {
+            $fields->removeByName('APIKey');
+        }
+
+        $listField = $fields->dataFieldByName('ListIDs');
+        if ($listField) {
+            $fields->removeByName('ListIDs');
+        }
+
+        $segmentField = $fields->dataFieldByName('HideSentToSegments');
+        if ($segmentField) {
+            $fields->removeByName('HideSentToSegments');
+        }
+
+        $limitField = $fields->dataFieldByName('Limit');
+        if ($limitField) {
+            $fields->removeByName('Limit');
+        }
 
         $campConf = GridFieldConfig_RecordEditor::create(20);
         $campConf
@@ -80,13 +109,15 @@ class CampaignListPage extends Page {
 
         $fields->insertBefore('Main', $tab);
 
-        $fields->addFieldToTab(
-            'Root.Mailchimp',
-            TextField::create(
+        $apiKeyField = $apiKeyField
+            ?? TextField::create(
                 'APIKey',
                 _t('Innoweb\\MailChimpSignup\\Model\\CampaignList.APIKEY', 'API Key')
-            )
+            );
+        $apiKeyField->setTitle(
+            _t('Innoweb\\MailChimpSignup\\Model\\CampaignList.APIKEY', 'API Key')
         );
+        $fields->addFieldToTab('Root.Mailchimp', $apiKeyField);
 
         if (!($this->APIKey)) {
             $fields->addFieldToTab(
@@ -119,36 +150,41 @@ class CampaignListPage extends Page {
                     $listSource[$lists['lists'][$pos]['id']] = $lists['lists'][$pos]['name'];
                 }
 
+                if (!($listField instanceof MultiValueDropdownField)) {
+                    $listField = MultiValueDropdownField::create('ListIDs');
+                }
+                $listField->setSource($listSource);
+                $listField->setTitle(
+                    _t(
+                        'Innoweb\\MailChimpSignup\\Model\\CampaignListPage.LimitByLists',
+                        'Only show campaigns sent to the following audiences'
+                    )
+                );
+
+                $segmentField = $segmentField
+                    ?? CheckboxField::create('HideSentToSegments');
+                $segmentField->setTitle(
+                    _t(
+                        'Innoweb\\MailChimpSignup\\Model\\CampaignListPage.HideSentToSegments',
+                        'Hide campaigns sent to segments of an audience'
+                    )
+                );
+
+                $limitField = $limitField
+                    ?? NumericField::create('Limit');
+                $limitField->setTitle(
+                    _t(
+                        'Innoweb\\MailChimpSignup\\Model\\CampaignListPage.Limit',
+                        'Limit campaigns shown (0 = all)'
+                    )
+                );
+
                 $fields->addFieldsToTab(
                     'Root.Mailchimp',
                     [
-                        // add list filter
-                        MultiValueDropdownField::create(
-                            'ListIDs',
-                            _t(
-                                'Innoweb\\MailChimpSignup\\Model\\CampaignListPage.LimitByLists',
-                                'Only show campaigns sent to the following audiences'
-                            ),
-                            $listSource
-                        ),
-
-                        // add segment checkbox
-                        CheckboxField::create(
-                            'HideSentToSegments',
-                            _t(
-                                'Innoweb\\MailChimpSignup\\Model\\CampaignListPage.HideSentToSegments',
-                                'Hide campaigns sent to segments of an audience'
-                            )
-                        ),
-
-                        // add segment checkbox
-                        NumericField::create(
-                            'Limit',
-                            _t(
-                                'Innoweb\\MailChimpSignup\\Model\\CampaignListPage.Limit',
-                                'Limit campaigns shown (0 = all)'
-                            )
-                        )
+                        $listField,
+                        $segmentField,
+                        $limitField,
                     ]
                 );
 
